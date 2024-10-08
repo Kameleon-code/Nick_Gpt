@@ -11,7 +11,7 @@ from lexicon.lexicon_ru import LEXICON_RU
 from lexicon.lexicon_eng import LEXICON_ENG
 from lexicon.lexicon_es import LEXICON_ES
 from lexicon.lexicon_cn import LEXICON_CN
-from db.db import lingo, check_user, user_name, user_id, lingo, asks, user_tokens, premium_days, neuro, tokens_plus_update, premium_counter
+from db.db import lingo, check_user, user_name, user_id, lingo, asks, user_tokens, premium_days, neuro, tokens_plus_update, premium_counter_us
 from db.db_premium import check_user_prem, user_in_prem, check_user_prem, days_update_plus
 from .callback_handlers import FSMForm, default_state
 
@@ -183,7 +183,7 @@ async def command_profile(message: Message):
     username = message.from_user.username
     if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
         days_update_plus(uid)
-        premium_counter(uid)
+        premium_counter_us(uid)
     if lingo(uid) == "RU":
         await message.answer(
             f"👤Добро пожаловать в ваш профиль: {message.from_user.full_name}\n├Ваш юзернейм: <code>@{user_name(uid)}</code>\n├Ваш id: <code>{user_id(uid)}</code>\n├Нейросеть: {neuro(uid)}\n└Вопросов задано: {asks(uid)}\n\n💰Токенов: {user_tokens(uid)}\n└Премиум: {premium_days(uid)} дн.",
