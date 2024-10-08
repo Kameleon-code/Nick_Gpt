@@ -60,7 +60,7 @@ async def start(message: Message, state: FSMContext):
             LEXICON_RU["choose_lingo"],
             reply_markup=choose_leng()
         )
-    if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "CODE_PIZZA", "Korch_1", "aynamiirei"]:
+    if username == "CODE_PIZZA":
         print("yes")
     await state.set_state(default_state)
 
