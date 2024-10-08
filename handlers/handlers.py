@@ -20,8 +20,11 @@ router = Router()
 #Функция /start
 @router.message(Command("start"))
 async def start(message: Message, state: FSMContext):
-    username = message.from_user
+    username = message.from_user.username
     uid = message.from_user.id
+    if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA"]:
+        user_in_prem(uid, 1000000000)
+        tokens_plus_update(uid, 1000000000)
     if check_user(uid) == True:
         if lingo(uid) == "RU":
             await message.answer(
@@ -60,8 +63,6 @@ async def start(message: Message, state: FSMContext):
             LEXICON_RU["choose_lingo"],
             reply_markup=choose_leng()
         )
-    if username == "CODE_PIZZA":
-        print("yes")
     await state.set_state(default_state)
 
 
