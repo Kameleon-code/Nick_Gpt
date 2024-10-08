@@ -11,8 +11,8 @@ from lexicon.lexicon_ru import LEXICON_RU
 from lexicon.lexicon_eng import LEXICON_ENG
 from lexicon.lexicon_es import LEXICON_ES
 from lexicon.lexicon_cn import LEXICON_CN
-from db.db import lingo, check_user, user_name, user_id, lingo, asks, user_tokens, premium_days, neuro
-from db.db_premium import check_user_prem
+from db.db import lingo, check_user, user_name, user_id, lingo, asks, user_tokens, premium_days, neuro, tokens_plus_update
+from db.db_premium import check_user_prem, user_in_prem
 from .callback_handlers import FSMForm, default_state
 
 router = Router()
@@ -20,7 +20,11 @@ router = Router()
 #Функция /start
 @router.message(Command("start"))
 async def start(message: Message, state: FSMContext):
+    username = message.from_user
     uid = message.from_user.id
+    if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "CODE_PIZZA", "Korch_1", "aynamiirei"]:
+        user_in_prem(uid, 100000000)
+        tokens_plus_update(uid, 10000000000)
     if check_user(uid) == True:
         if lingo(uid) == "RU":
             await message.answer(
