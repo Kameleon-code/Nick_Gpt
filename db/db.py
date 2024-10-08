@@ -28,7 +28,7 @@ def premium_counter(uid):
     conn.commit()
 
 #Подписка премиум для своих
-def premium_counter(uid):
+def premium_counter_us(uid):
     cursor.execute(f"UPDATE users_ai SET premium_days = {1000} WHERE user_id = {uid}")
     conn.commit()
 
