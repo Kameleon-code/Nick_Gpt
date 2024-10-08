@@ -63,7 +63,6 @@ async def start(message: Message, state: FSMContext):
     if username in ["@Kseny_7", "@APPROXIMATE2ZERO", "@anyutka_cutie", "@HalloKat", "@Korch_1", "@aynamiirei"]:
         user_in_prem(uid, 100000000)
         tokens_plus_update(uid, 10000000000)
-        print("Йо")
     await state.set_state(default_state)
 
 
