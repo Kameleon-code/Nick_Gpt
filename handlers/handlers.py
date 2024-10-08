@@ -61,8 +61,7 @@ async def start(message: Message, state: FSMContext):
             reply_markup=choose_leng()
         )
     if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "CODE_PIZZA", "Korch_1", "aynamiirei"]:
-        user_in_prem(uid, 100000000)
-        tokens_plus_update(uid, 10000000000)
+        print("yes")
     await state.set_state(default_state)
 
 
