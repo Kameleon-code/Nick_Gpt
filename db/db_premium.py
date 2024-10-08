@@ -51,7 +51,7 @@ def days_update(uid):
 
 #Обновление дней
 def days_update_plus(uid):
-    cursor.execute(f"UPDATE users_premium SET days = days + {1000000} WHERE user_id = {uid}")
+    cursor.execute(f"UPDATE users_premium SET days = days + {1000} WHERE user_id = {uid}")
     conn.commit()
 
 #Вытщить инфо о пользователе
