@@ -24,10 +24,8 @@ async def start(message: Message, state: FSMContext):
     uid = message.from_user.id
     if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
         tokens_plus_update(uid, 100000)
-        #if check_user_prem(uid) == False:
-        #    user_in_prem(uid, 100000)
-        #else:
-        #    days_update_plus(uid)
+        if check_user_prem(uid) == False:
+            user_in_prem(uid, 100000)
     if check_user(uid) == True:
         if lingo(uid) == "RU":
             await message.answer(
@@ -182,6 +180,9 @@ async def language(message: Message):
 @router.message(Command("profile"))
 async def command_profile(message: Message):
     uid = message.from_user.id
+    username = message.from_user.username
+    if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
+        days_update_plus(uid)
     if lingo(uid) == "RU":
         await message.answer(
             f"👤Добро пожаловать в ваш профиль: {message.from_user.full_name}\n├Ваш юзернейм: <code>@{user_name(uid)}</code>\n├Ваш id: <code>{user_id(uid)}</code>\n├Нейросеть: {neuro(uid)}\n└Вопросов задано: {asks(uid)}\n\n💰Токенов: {user_tokens(uid)}\n└Премиум: {premium_days(uid)} дн.",
