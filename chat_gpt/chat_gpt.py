@@ -10,7 +10,7 @@ from supa import BOT
 
 
 from db.db import neuro, asks_update, role, user_tokens_update, premium_tokens_update, update_ai, set_mode, ans_gpt, ready_answer_gpt, lingo, user_tokens
-from db.db_premium import check_user_prem
+from db.db_premium import check_user_prem, user_in_prem, days_update_plus
 
 from ikb.ikb import photo_again_ru, photo_again_eng, photo_again_es, photo_again_cn, tokens_ikb_ru, tokens_ikb_eng, tokens_ikb_es, tokens_ikb_ru_prem, tokens_ikb_eng_prem, tokens_ikb_es_prem, tokens_ikb_cn_prem, tokens_ikb_cn
 
@@ -28,6 +28,12 @@ client_1 = openai.AsyncOpenAI(
 async def fin_answer(message: Message):
     message_gpt = message.text
     uid = message.from_user.id
+    username = message.from_user.username
+    if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
+        if check_user_prem(uid) == False:
+            user_in_prem(uid, 100000)
+        else:
+            days_update_plus(uid)
     if user_tokens(uid) > 0:
         await message.answer(
             "⌛️"
