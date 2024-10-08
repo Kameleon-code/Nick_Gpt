@@ -28,12 +28,6 @@ client_1 = openai.AsyncOpenAI(
 async def fin_answer(message: Message):
     message_gpt = message.text
     uid = message.from_user.id
-    username = message.from_user.username
-    if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
-        if check_user_prem(uid) == False:
-            user_in_prem(uid, 100000)
-        else:
-            days_update_plus(uid)
     if user_tokens(uid) > 0:
         await message.answer(
             "⌛️"
