@@ -32,6 +32,8 @@ async def fin_answer(message: Message):
         await message.answer(
             "⌛️"
         )
+        doc = aw.Document()
+        builder = aw.DocumentBuilder(doc)
         if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini"]:
                 asks_update(uid)
                 if check_user_prem(uid) == True:
@@ -50,7 +52,31 @@ async def fin_answer(message: Message):
                         {"role": "user", "content": message_gpt}, {"role": "system", "content": prompt, "max_tokens": 8000}], model=neuro(uid)
                                 )
                 total_tokens = chat_completion.usage.total_tokens
-                answer = chat_completion.choices[0].message.content 
+                answer = chat_completion.choices[0].message.content
+                if check_user_prem(uid) == True:
+                    premium_tokens_update(uid, total_tokens)
+                else:
+                    user_tokens_update(uid, total_tokens)
+                if role(uid) in ["2", "3", "4"]:
+                        punctuation = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']
+                        new_name = message_gpt
+                        for i in message_gpt:
+                            if i in punctuation:
+                                new_name = new_name.replace(i, '')
+                        builder.writeln(answer)
+                        doc.save(f"{new_name}.docx")
+                        with open(f"{new_name}.docx", "rb") as file:
+                            file_for_send = BufferedInputFile(
+                                file.read(),
+                                filename=f"{new_name}.docx"
+                            )      
+                            await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
+                        os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
+                        set_mode(uid, "1")
+                else:
+                    await message.answer(
+                        answer
+                        )
         elif neuro(uid) == "o1-mini" or neuro(uid) == "o1-preview":
                     chat_completion = await client_1.chat.completions.create(
                     model=neuro(uid),
@@ -63,8 +89,32 @@ async def fin_answer(message: Message):
                 )      
                     total_tokens = chat_completion.usage.total_tokens
                     answer = chat_completion.choices[0].message.content
+                    if check_user_prem(uid) == True:
+                        premium_tokens_update(uid, total_tokens)
+                    else:
+                        user_tokens_update(uid, total_tokens)
+                    if role(uid) in ["2", "3", "4"]:
+                            punctuation = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']
+                            new_name = message_gpt
+                            for i in message_gpt:
+                                if i in punctuation:
+                                    new_name = new_name.replace(i, '')
+                            builder.writeln(answer)
+                            doc.save(f"{new_name}.docx")
+                            with open(f"{new_name}.docx", "rb") as file:
+                                file_for_send = BufferedInputFile(
+                                    file.read(),
+                                    filename=f"{new_name}.docx"
+                                )      
+                                await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
+                            os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
+                            set_mode(uid, "1")
+                    else:
+                        await message.answer(
+                            answer
+                            )
         elif neuro(uid) in ["DALL-E 3"]:
-               image = await client_1.images.generate(
+                image = await client_1.images.generate(
                       model="dall-e-3",
                       prompt=message_gpt,
                       size="1024x1024",
@@ -72,7 +122,21 @@ async def fin_answer(message: Message):
                       n=1,
                       style="vivid"
                )
-               answer = image.data[0].url
+                answer = image.data[0].url
+                total_tokens = 1000
+                if check_user_prem(uid) == True:
+                    premium_tokens_update(uid, total_tokens)
+                else:
+                    user_tokens_update(uid, total_tokens)
+                if lingo(uid) == "RU":
+                    await message.answer_photo(photo=answer, reply_markup=photo_again_ru())
+                elif lingo(uid) == "ENG":
+                    await message.answer_photo(photo=answer, reply_markup=photo_again_eng())
+                elif lingo(uid) == "ES":
+                    await message.answer_photo(photo=answer, reply_markup=photo_again_es())
+                elif lingo(uid) == "CN":
+                    await message.answer_photo(photo=answer, reply_markup=photo_again_cn())
+                update_ai(uid, "gpt-4o-mini")
         doc = aw.Document()
         builder = aw.DocumentBuilder(doc)
         if role(uid) in ["2", "3", "4"]:
@@ -91,32 +155,6 @@ async def fin_answer(message: Message):
                     await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
                 os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
                 set_mode(uid, "1")
-        else:
-            if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini", " o1-preview", "o1-mini"]:
-                await message.answer(
-                    answer
-                )
-            else:
-                if lingo(uid) == "RU":
-                    await message.answer_photo(photo=answer, reply_markup=photo_again_ru())
-                elif lingo(uid) == "ENG":
-                    await message.answer_photo(photo=answer, reply_markup=photo_again_eng())
-                elif lingo(uid) == "ES":
-                    await message.answer_photo(photo=answer, reply_markup=photo_again_es())
-                elif lingo(uid) == "CN":
-                    await message.answer_photo(photo=answer, reply_markup=photo_again_cn())
-        if check_user_prem(uid == True):
-                if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini", " o1-preview", "o1-mini"]:
-                    premium_tokens_update(uid, total_tokens)
-                else:
-                    premium_tokens_update(uid, 1000)
-                    update_ai(uid, "gpt-4o-mini")
-        else:
-                if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini", " o1-preview", "o1-mini"]:
-                    user_tokens_update(uid, total_tokens)
-                else:
-                      user_tokens_update(uid, 1000)
-                      update_ai(uid, "gpt-4o-mini")
     else:
         if check_user_prem(uid) == False:
             if lingo(uid) == "RU":
