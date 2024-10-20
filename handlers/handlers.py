@@ -25,7 +25,7 @@ async def start(message: Message, state: FSMContext):
     if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
         tokens_plus_update(uid, 1000)
         if check_user_prem(uid) == False:
-            user_in_prem(uid, 1000) 
+            user_in_prem(uid, 1000)
     if check_user(uid) == True:
         if lingo(uid) == "RU":
             await message.answer(
