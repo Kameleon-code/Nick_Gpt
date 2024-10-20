@@ -29,7 +29,7 @@ def premium_counter(uid):
 
 #Подписка премиум для своих
 def premium_counter_us(uid):
-    cursor.execute(f"UPDATE users_ai SET premium_days = premium_days + {1000} WHERE user_id = {uid}")
+    cursor.execute(f"UPDATE users_ai SET premium_days = premium_days + {100} WHERE user_id = {uid}")
     conn.commit()
 
 #Возвратить юзернейм юзера
