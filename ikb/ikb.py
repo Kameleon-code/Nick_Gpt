@@ -610,7 +610,7 @@ def photo_text_cn():
 def photo_again_ru():
     ikb = [
         [
-            InlineKeyboardButton(text="🔁Потвторить генерацию", callback_data="photo_ru")
+            InlineKeyboardButton(text="🔁Повторить генерацию", callback_data="photo_ru")
         ]
     ]
 
