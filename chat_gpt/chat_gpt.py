@@ -72,6 +72,9 @@ async def fin_answer(message: Message):
                     reply_markup=tokens_ikb_cn_prem()
                 )
     else:
+        await message.answer(
+            "⌛️"
+        )
         doc = aw.Document()
         builder = aw.DocumentBuilder(doc)
         if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini"]:
