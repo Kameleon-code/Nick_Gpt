@@ -30,7 +30,7 @@ async def fin_answer(message: Message):
     uid = message.from_user.id
     if user_tokens(uid) > 0:
         await message.answer(
-            "⌛️"
+            "❌Закончились токены! Приобретите токены с помощью конопок ниже"
         )
         doc = aw.Document()
         builder = aw.DocumentBuilder(doc)
@@ -71,7 +71,7 @@ async def fin_answer(message: Message):
                                 filename=f"{new_name}.docx"
                             )      
                             await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
-                        os.remove(f"home\\nick\\Nick_Gpt\\'{new_name}'.docx")
+                        os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
                         set_mode(uid, "1")
                 else:
                     await message.answer(
