@@ -28,7 +28,7 @@ client_1 = openai.AsyncOpenAI(
 async def fin_answer(message: Message):
     message_gpt = message.text
     uid = message.from_user.id
-    if user_tokens(uid) > 0:
+    if user_tokens(uid) < 0:
         if check_user_prem(uid) == False:
             if lingo(uid) == "RU":
                 await message.answer(
@@ -195,46 +195,3 @@ async def fin_answer(message: Message):
                     await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
                 os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
                 set_mode(uid, "1")
-    else:
-        if check_user_prem(uid) == False:
-            if lingo(uid) == "RU":
-                message.answer(
-                     f"Закончились токены! на данный момент ваш баланс {user_tokens(uid)}. Вы можете пополнить баланс выбрав нужный для вас тариф!",
-                     reply_markup=tokens_ikb_ru()
-                )
-            elif lingo(uid) == "ENG":
-                message.answer(
-                     f"We're out of tokens! As of this moment, your balance {user_tokens(uid)}. You can refill your balance by choosing the tariff you need!",
-                     reply_markup=tokens_ikb_eng()
-                )
-            elif lingo(uid) == "ES":
-                message.answer(
-                     f"Nos hemos quedado sin fichas. Tu saldo actual es de {user_tokens(uid)}. Puedes recargar tu saldo eligiendo la tarifa que necesites.",
-                     reply_markup=tokens_ikb_es()
-                )
-            elif lingo(uid) == "CN":
-                message.answer(
-                     f"我們沒有代幣了! 您的餘額目前是 {user_tokens(uid)}. 您可以選擇所需的電價來充值您的餘額!",
-                     reply_markup=tokens_ikb_cn()
-                )
-        else:
-            if lingo(uid) == "RU":
-                message.answer(
-                     f"Закончились токены! на данный момент ваш бланас {user_tokens(uid)}. Вы можете пополнить баланс выбрав нужный для вас тариф!",
-                     reply_markup=tokens_ikb_ru_prem()
-                )
-            elif lingo(uid) == "ENG":
-                message.answer(
-                     f"We're out of tokens! As of this moment, your balance {user_tokens(uid)}. You can refill your balance by choosing the tariff you need!",
-                     reply_markup=tokens_ikb_eng_prem()
-                )
-            elif lingo(uid) == "ES":
-                message.answer(
-                     f"Nos hemos quedado sin fichas. Tu saldo actual es de {user_tokens(uid)}. Puedes recargar tu saldo eligiendo la tarifa que necesites",
-                     reply_markup=tokens_ikb_es_prem()
-                )
-            elif lingo(uid) == "CN":
-                message.answer(
-                     f"我們沒有代幣了! 您的餘額目前是 {user_tokens(uid)}. 您可以選擇所需的電價來充值您的餘額!",
-                     reply_markup=tokens_ikb_cn_prem()
-                )
