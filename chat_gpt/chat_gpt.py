@@ -29,22 +29,49 @@ async def fin_answer(message: Message):
     message_gpt = message.text
     uid = message.from_user.id
     if user_tokens(uid) > 0:
-        if lingo(uid) == "RU":
-            await message.answer(
-                 "❗️Закончились токены\n\n👇Выберите нужный тариф"
-            )
-        if lingo(uid) == "ENG":
-            await message.answer(
-                 "❗️Out of tokens\n\n👇Select the desired tariff"
-            )
-        if lingo(uid) == "ES":
-            await message.answer(
-                 "❗️Sin fichas\n\n👇Selecciona la tarifa deseada"
-            )
-        if lingo(uid) == "CN":
-            await message.answer(
-                 "❗️代币用完\n\n👇选择所需的费率"
-            )
+        if check_user_prem(uid) == False:
+            if lingo(uid) == "RU":
+                await message.answer(
+                    "❗️Закончились токены\n\n👇Выберите нужный тариф",
+                    reply_markup=tokens_ikb_ru()
+                )
+            if lingo(uid) == "ENG":
+                await message.answer(
+                    "❗️Out of tokens\n\n👇Select the desired tariff",
+                    reply_markup=tokens_ikb_eng()
+                )
+            if lingo(uid) == "ES":
+                await message.answer(
+                    "❗️Sin fichas\n\n👇Selecciona la tarifa deseada",
+                    reply_markup=tokens_ikb_es()
+                )
+            if lingo(uid) == "CN":
+                await message.answer(
+                    "❗️代币用完\n\n👇选择所需的费率",
+                    reply_markup=tokens_ikb_cn()
+                )
+        elif check_user_prem(uid) == True:
+            if lingo(uid) == "RU":
+                await message.answer(
+                    "❗️Закончились токены\n\n👇Выберите нужный тариф",
+                    reply_markup=tokens_ikb_ru_prem()
+                )
+            if lingo(uid) == "ENG":
+                await message.answer(
+                    "❗️Out of tokens\n\n👇Select the desired tariff",
+                    reply_markup=tokens_ikb_eng_prem()
+                )
+            if lingo(uid) == "ES":
+                await message.answer(
+                    "❗️Sin fichas\n\n👇Selecciona la tarifa deseada",
+                    reply_markup=tokens_ikb_es_prem()
+                )
+            if lingo(uid) == "CN":
+                await message.answer(
+                    "❗️代币用完\n\n👇选择所需的费率",
+                    reply_markup=tokens_ikb_cn_prem()
+                )
+    else:
         doc = aw.Document()
         builder = aw.DocumentBuilder(doc)
         if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini"]:
