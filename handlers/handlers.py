@@ -66,6 +66,26 @@ async def start(message: Message, state: FSMContext):
         )
     await state.set_state(default_state)
 
+#Функция /help
+@router.message(Command("help"))
+async def help_func(message: Message):
+    uid = message.from_user.id
+    if lingo(uid) == "RU":
+        await message.answer(
+            "🗣Связь с администрацией @Kseny_7"
+        )
+    elif lingo(uid) == "ENG":
+        await message.answer(
+            "🗣Communication with the administration @Kseny_7"
+        )
+    elif lingo(uid) == "ES":
+        await message.answer(
+            "🗣Enlace con la administración @Kseny_7"
+        )
+    elif lingo(uid) == "CN":
+        await message.answer(
+            "🗣与行政部门联络 @Kseny_7"
+        )
 
 #Функция /premium
 @router.message(Command("premium"))
