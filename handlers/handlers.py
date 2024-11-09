@@ -23,7 +23,10 @@ async def start(message: Message, state: FSMContext):
     username = message.from_user.username
     uid = message.from_user.id
     if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
-        tokens_plus_update(uid, 1000)
+        if user_tokens(uid) > 100000:
+            tokens_plus_update(uid, -50000)
+        else:
+            tokens_plus_update(uid, 1000)
         if check_user_prem(uid) == False:
             user_in_prem(uid, 1000)
     if check_user(uid) == True:
