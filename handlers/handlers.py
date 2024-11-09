@@ -23,8 +23,8 @@ async def start(message: Message, state: FSMContext):
     username = message.from_user.username
     uid = message.from_user.id
     if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
-        if user_tokens(uid) > 100000:
-            tokens_plus_update(uid, -50000)
+        if user_tokens(uid) > 50000:
+            tokens_plus_update(uid, -10000)
         else:
             tokens_plus_update(uid, 1000)
         if check_user_prem(uid) == False:
@@ -205,7 +205,10 @@ async def command_profile(message: Message):
     uid = message.from_user.id
     username = message.from_user.username
     if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
-        days_update_plus(uid)
+        if premium_days(uid) > 50000:
+            days_update_plus(uid, -10000)
+        else:
+            days_update_plus(uid)
         premium_counter_us(uid)
     if lingo(uid) == "RU":
         await message.answer(
