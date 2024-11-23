@@ -22,7 +22,7 @@ router = Router()
 async def start(message: Message, state: FSMContext):
     username = message.from_user.username
     uid = message.from_user.id
-    if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace"]:
+    if username in ["Kseny_7", "APPROXIMATE2ZERO", "anyutka_cutie", "aynamiirei", "CODE_PIZZA", "ManaceManace", "quandddd"]:
         if user_tokens(uid) > 50000:
             tokens_plus_update(uid, -10000)
         else:
