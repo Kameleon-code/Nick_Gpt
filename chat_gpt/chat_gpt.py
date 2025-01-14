@@ -114,7 +114,7 @@ async def fin_answer(message: Message):
                                 filename=f"{new_name}.docx"
                             )      
                             await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
-                        os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
+                        os.remove(f"\\home\\nick\\Nick_Gpt\\{new_name}.docx")
                         set_mode(uid, "1")
                 else:
                     await message.answer(
