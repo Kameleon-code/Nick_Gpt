@@ -25,8 +25,9 @@ from asyncio.events import get_running_loop
 from db.db import neuro, asks_update, role, user_tokens_update, premium_tokens_update, update_ai, set_mode, ans_gpt, ready_answer_gpt, lingo, user_tokens
 from db.db_premium import check_user_prem
 from db.luma_udio import check_user_in_luma, times_killer, take_mode_kling, take_seconds
+from db.udio import times_udio_killer, check_user_in_udio
 
-from ikb.ikb import photo_again_ru, photo_again_eng, photo_again_es, photo_again_cn, tokens_ikb_ru, tokens_ikb_eng, tokens_ikb_es, tokens_ikb_ru_prem, tokens_ikb_eng_prem, tokens_ikb_es_prem, tokens_ikb_cn_prem, tokens_ikb_cn, choose_luma_ikb_eng_pro, choose_luma_ikb_eng_standard, choose_luma_ikb_es_standard, choose_luma_ikb_es_pro, choose_luma_ikb_cn_standard, choose_luma_ikb_cn_pro, choose_luma_ikb_ru_pro, choose_luma_ikb_ru_standard, with_no_photo
+from ikb.ikb import photo_again_ru, photo_again_eng, photo_again_es, photo_again_cn, tokens_ikb_ru, tokens_ikb_eng, tokens_ikb_es, tokens_ikb_ru_prem, tokens_ikb_eng_prem, tokens_ikb_es_prem, tokens_ikb_cn_prem, tokens_ikb_cn, choose_luma_ikb_eng_pro, choose_luma_ikb_eng_standard, choose_luma_ikb_es_standard, choose_luma_ikb_es_pro, choose_luma_ikb_cn_standard, choose_luma_ikb_cn_pro, choose_luma_ikb_ru_pro, choose_luma_ikb_ru_standard, with_no_photo, choose_udio_ikb_ru, choose_udio_ikb_eng, choose_udio_ikb_es, choose_udio_ikb_cn
 
 bot = BOT
 
@@ -52,7 +53,7 @@ headers = {
     }
 
 
-@router.callback_query(F.data == "gen_video_ru")
+@router.callback_query(F.data == "gen_video")
 async def luma(callback: CallbackQuery, state: FSMContext):
     uid = callback.from_user.id
     username = callback.from_user.username
@@ -113,10 +114,26 @@ async def luma(callback: CallbackQuery, state: FSMContext):
                         reply_markup=choose_luma_ikb_cn_standard()
                     )
         else:
-            await callback.message.answer(
-                "Подробно опишите то что хотите увидеть в вашем видео"
-            )
-            await state.set_state(Conditions.text_for_luma)
+            if lingo(uid) == "RU":
+                await callback.message.answer(
+                    "Подробно опишите то что хотите увидеть в вашем видео"
+                )
+                await state.set_state(Conditions.text_for_luma)
+            elif lingo(uid) == "ENG":
+                await callback.message.answer(
+                    "Describe in detail what you would like to see in the video"
+                )
+                await state.set_state(Conditions.text_for_luma)
+            elif lingo(uid) == "ES":
+                await callback.message.answer(
+                    "Describa detalladamente lo que quiere ver en su vídeo"
+                )
+                await state.set_state(Conditions.text_for_luma)
+            elif lingo(uid) == "CN":
+                await callback.message.answer(
+                    "详细描述您希望在视频中看到的内容"
+                )
+                await state.set_state(Conditions.text_for_luma)
     else:
         await callback.message.answer(
             "Подробно опишите то что хотите увидеть в вашем видео"
@@ -125,12 +142,29 @@ async def luma(callback: CallbackQuery, state: FSMContext):
 
 @router.message(StateFilter(Conditions.text_for_luma), F.text)
 async def photo_for_luma(message: Message, state: FSMContext):
+    uid = message.from_user.id
     await state.update_data(prompt = message.text)
     kling_prompt[message.from_user.id] = await state.get_data()
-    await message.answer(
-        "Отправьте фото, которое хотите оживить",
-        reply_markup=with_no_photo()
-    )
+    if lingo(uid) == "RU":
+        await message.answer(
+            "Отправьте фото, которое хотите оживить.\n\nЕсли хотите продолжить без фото, нажмите на кнопку ниже",
+            reply_markup=with_no_photo()
+        )
+    if lingo(uid) == "ENG":
+        await message.answer(
+            "Send the photo you want to animate.\n\nIf you want to continue without a photo, click the button below",
+            reply_markup=with_no_photo()
+        )
+    if lingo(uid) == "ES":
+        await message.answer(
+            "Envía la foto que quieres animar.\n\nSi quieres continuar sin foto, haz clic en el botón de abajo",
+            reply_markup=with_no_photo()
+        )
+    if lingo(uid) == "CN":
+        await message.answer(
+            "发送要制作动画的照片\n\n如果您想在没有照片的情况下继续，请点击下面的按钮",
+            reply_markup=with_no_photo()
+        )
     await state.set_state(Conditions.photo_for_luma)
 
 def check_status_kling(url_res, res):
@@ -172,7 +206,7 @@ async def just_video(callback: CallbackQuery, state: FSMContext):
     video_from_url = URLInputFile(video_link)
     await callback.message.answer_video(
         video=video_from_url,
-        caption="Ваше видео"
+        caption="📹📹📹"
     )
     times_killer(uid)
     await state.set_state(default_state)
@@ -223,13 +257,123 @@ async def img_to_mp4(message: Message, state: FSMContext):
     video_from_url = URLInputFile(video_link)
     await message.answer_video(
         video=video_from_url,
-        caption="Ваше ожилвенное фото"
+        caption="📹📹📹"
     )
     times_killer(uid)
     os.remove(f"C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\{photo_id}.jpeg")
     await state.set_state(default_state)
 
-@router.callback_query(StateFilter(Conditions.udio_text), F.text)
+@router.callback_query(F.data == "gen_music")
+async def start_music(callback: CallbackQuery, state: FSMContext):
+    uid = callback.from_user.id
+    username = callback.from_user.username
+    if username not in ["CODE_PIZZA", "Kseny_7"]:
+        if check_user_in_udio(uid) == False:
+            if lingo(uid) == "RU":
+                await callback.message.answer(
+                    text="🎧<b>Udio</b>\n\n🗓Срок подписки: <b>7 дней</b>\n\nДоступные тарифы👇",
+                    parse_mode=ParseMode.HTML,
+                    reply_markup=choose_udio_ikb_ru()
+                )
+            elif lingo(uid) == "ENG":
+                await callback.message.answer(
+                    text="🎧<b>Udio</b>\n\n🗓Subscription period: <b>7 days</b>\n\nAvailable tariffs👇",
+                    parse_mode=ParseMode.HTML,
+                    reply_markup=choose_udio_ikb_eng()
+                )
+            elif lingo(uid) == "ES":
+                await callback.message.answer(
+                    text="🎧<b>Udio</b>\n\n🗓Periodo de suscripción: <b>7 días</b>\n\nTarifas disponibles👇",
+                    parse_mode=ParseMode.HTML,
+                    reply_markup=choose_udio_ikb_es()
+                )
+            elif lingo(uid) == "CN":
+                await callback.message.answer(
+                    text="🎧<b>Udio</b>\n\n🗓订阅期限：<b>7 天</b>\n\n 可用关税👇",
+                    parse_mode=ParseMode.HTML,
+                    reply_markup=choose_udio_ikb_cn()
+                )
+        else:
+            if lingo(uid) == "RU":
+                await callback.message.answer(
+                    "Подробно опишите то что вы хотите услышать в аудио"
+                )
+            elif lingo(uid) == "ENG":
+                await callback.message.answer(
+                    "Describe in detail what you want to hear in the audio"
+                )
+            elif lingo(uid) == "ES":
+                await callback.message.answer(
+                    "Describa detalladamente lo que desea escuchar en el audio"
+                )
+            elif lingo(uid) == "CN":
+                await callback.message.answer(
+                    "详细描述您希望在音频中听到的内容"
+                )
+    else:         
+        if lingo(uid) == "RU":
+            await callback.message.answer(
+                "Подробно опишите то что вы хотите услышать в аудио"
+            )
+        elif lingo(uid) == "ENG":
+            await callback.message.answer(
+                "Describe in detail what you want to hear in the audio"
+            )
+        elif lingo(uid) == "ES":
+            await callback.message.answer(
+                "Describa detalladamente lo que desea escuchar en el audio"
+            )
+        elif lingo(uid) == "CN":
+            await callback.message.answer(
+                "详细描述您希望在音频中听到的内容"
+            )
+    await state.set_state(Conditions.udio_text)
+
+@router.message(StateFilter(Conditions.udio_text), F.text)
+async def make_music(message: Message, state: FSMContext):
+    uid = message.from_user.id
+    loop = get_running_loop()
+    await message.answer(
+        "⌛️"
+    )
+
+    url_endpoit = "https://api.gen-api.ru/api/v1/networks/udio"
+
+    input = {
+    "translate_input": True,
+    "prompt": message.text,
+    "lyrics_type": "generate",
+    "prompt_strength": 0.5,
+    "lyrics_strength": 0.5,
+    "generation_quality": 0.75,
+    "model_type": "udio130-v1.5",
+    "bypass_prompt_optimization": False,
+    "lyrics_placement_start": 0.2,
+    "lyrics_placement_end": 0.9,
+    "clarity_strength": 0.25,
+    "mode": "regular"
+    }
+
+    generation = requests.post(url_endpoit, json=input, headers=headers)
+    pre_id = json.loads(generation.text)
+    id = json.loads(generation.text)["request_id"]
+    print(id)
+    print(pre_id)
+
+    url_res = f"https://api.gen-api.ru/api/v1/request/get/{id}"
+
+    time.sleep(10)
+    pre_res = requests.get(url_res, headers=headers)
+    await async_check_status_kling(loop, url_res, pre_res)
+    res = requests.get(url_res, headers=headers)
+    audio_link = json.loads(res.text)["result"][0]
+    audio_from_url = URLInputFile(audio_link)
+    await message.answer_audio(
+        audio=audio_from_url,
+        caption="🎧🎧🎧"
+    )
+    times_udio_killer(uid)
+
 
 @router.message(F.text)
 async def fin_answer(message: Message):
