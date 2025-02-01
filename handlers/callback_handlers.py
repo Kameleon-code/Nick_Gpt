@@ -11,11 +11,12 @@ from aiogram.fsm.state import StatesGroup, State, default_state
 
 from yoomoney import Quickpay, Client
 
-from ikb.ikb import sub_ikb_ru, sub_ikb_eng, sub_ikb_esp, sub_ikb_cn, ikb_premium_ru, ikb_premium_eng, ikb_premium_es, ikb_premium_cn, ikb_back_ru, ikb_back_eng, ikb_back_es, ikb_back_cn, tokens_ikb_ru, tokens_ikb_eng, tokens_ikb_es, tokens_ikb_cn, get_paginated_kb_ru, get_paginated_kb_eng, get_paginated_kb_es, get_paginated_kb_cn, buy_tokens_ru, buy_tokens_eng, buy_tokens_es, buy_tokens_cn, choose_luma_ikb_ru_standard, choose_luma_ikb_ru_pro, choose_luma_ikb_eng_pro, choose_luma_ikb_eng_standard, choose_luma_ikb_es_pro, choose_luma_ikb_es_standard, choose_luma_ikb_cn_pro, choose_luma_ikb_cn_standard, Pagination_ru, Pagination_eng, Pagination_es, Pagination_cn
+from ikb.ikb import sub_ikb_ru, sub_ikb_eng, sub_ikb_esp, sub_ikb_cn, ikb_premium_ru, ikb_premium_eng, ikb_premium_es, ikb_premium_cn, ikb_back_ru, ikb_back_eng, ikb_back_es, ikb_back_cn, tokens_ikb_ru, tokens_ikb_eng, tokens_ikb_es, tokens_ikb_cn, get_paginated_kb_ru, get_paginated_kb_eng, get_paginated_kb_es, get_paginated_kb_cn, buy_tokens_ru, buy_tokens_eng, buy_tokens_es, buy_tokens_cn, choose_luma_ikb_ru_standard, choose_luma_ikb_ru_pro, choose_luma_ikb_eng_pro, choose_luma_ikb_eng_standard, choose_luma_ikb_es_pro, choose_luma_ikb_es_standard, choose_luma_ikb_cn_pro, choose_luma_ikb_cn_standard, choose_udio_ikb_ru, choose_udio_ikb_eng, choose_udio_ikb_es, choose_udio_ikb_cn, Pagination_ru, Pagination_eng, Pagination_es, Pagination_cn
 from db.db import user_in_db, check_user, lingo, user_lingo, update_ai, tokens_plus_update, set_mode
 from db.db_pag import title, stat, stat_eng, stat_es, stat_cn
 from db.db_premium import check_user_prem, user_in_prem
 from db.luma_udio import check_user_in_luma, add_user_in_luma
+from db.udio import add_user_in_udio, check_user_in_udio
 from lexicon.lexicon_ru import LEXICON_RU
 from lexicon.lexicon_eng import LEXICON_ENG
 from lexicon.lexicon_es import LEXICON_ES
@@ -41,6 +42,7 @@ class FSMForm(StatesGroup):
     menu_pay=State() #Меню со страницей оплаты
     tokens=State() #Назад в меню с токенами
     luma=State()
+    udio = State()
 
 
 #Выбор языка + сохранение данных
@@ -483,7 +485,92 @@ async def kling(callback: CallbackQuery):
             reply_markup=choose_luma_ikb_cn_standard()
         )
 
+@router.callback_query(F.data == "udio")
+async def udio(callback: CallbackQuery):
+    uid = callback.from_user.id
+    if lingo(uid) == "RU":
+        await callback.message.answer(
+            text="👑<b></b>\n\n🗓Срок подписки: <b>7 дней</b>\n\nДоступные тарифы👇",
+            parse_mode=ParseMode.HTML,
+            reply_markup=choose_udio_ikb_ru()
+        )
+    elif lingo(uid) == "ENG":
+        await callback.message.answer(
+            text="<b></b>\n\n🗓Subscription period: <b>7 days</b>\n\nAvailable tariffs👇",
+            parse_mode=ParseMode.HTML,
+            reply_markup=choose_udio_ikb_eng()
+        )
+    elif lingo(uid) == "ES":
+        await callback.message.answer(
+            text="<b></b>\n\n🗓Periodo de suscripción: <b>7 días</b>\n\nTarifas disponibles👇",
+            parse_mode=ParseMode.HTML,
+            reply_markup=choose_udio_ikb_es()
+        )
+    elif lingo(uid) == "CN":
+        await callback.message.answer(
+            text="<b></b>\n\n🗓订阅期限：<b>7 天</b>\n\n 可用关税👇",
+            parse_mode=ParseMode.HTML,
+            reply_markup=choose_udio_ikb_cn()
+        )
+
 #Покупка токенов
+
+@router.callback_query(F.data == "udio_10")
+async def week(callback: CallbackQuery, state: FSMContext):
+    uid = callback.from_user.id
+    days = 7
+    times = 10
+    await state.update_data(days = days)
+    days_luma[callback.from_user.id] = await state.get_data()
+    await state.update_data(times = times)
+    luma_times[callback.from_user.id] = await state.get_data()
+    num3 = "".join(random.choices(string.ascii_letters + string.digits, k=15))
+    await state.update_data(labl = num3)
+    invoice = Quickpay(
+            receiver="410012465765599",
+            quickpay_form="shop",
+            targets="Sponsor",
+            paymentType="SB",
+            sum=399,
+            label=num3
+        )
+    if lingo(uid) == "RU":
+        await callback.message.answer(
+                text = hlink(
+                    title="Ваша ссылка для оплаты сгенерирована 👈",
+                    url=invoice.base_url
+                ),
+                parse_mode=ParseMode.HTML,
+                reply_markup=ikb_premium_ru()
+            )
+    elif lingo(uid) == "ENG":
+        await callback.message.answer(
+            text = hlink(
+                title="Your payment link has been generated 👈",
+                url=invoice.base_url
+            ),
+            parse_mode=ParseMode.HTML,
+            reply_markup=ikb_premium_eng()
+        )
+    elif lingo(uid) == "ES":
+        await callback.message.answer(
+            text = hlink(
+                title="Se ha generado tu enlace de pago 👈",
+                url=invoice.base_url
+            ),
+            parse_mode=ParseMode.HTML,
+            reply_markup=ikb_premium_es()
+        )
+    elif lingo(uid) == "CN":
+        await callback.message.answer(
+            text = hlink(
+                title="您的付款链接已生成 👈",
+                url=invoice.base_url
+            ),
+            parse_mode=ParseMode.HTML,
+            reply_markup=ikb_premium_cn()
+        )
+    await state.set_state(FSMForm.udio)
 
 @router.callback_query(F.data == "week_standard_5")
 async def week(callback: CallbackQuery, state: FSMContext):
@@ -828,7 +915,97 @@ async def check(callback: CallbackQuery, state: FSMContext):
                 LEXICON_CN["pay_no"],
                 reply_markup=ikb_back_cn()
             )
-    await state.set_state(FSMForm.default_state)
+    await state.set_state(default_state)
+
+@router.callback_query(F.data == "check", StateFilter(FSMForm.udio))
+async def check(callback: CallbackQuery, state: FSMContext):
+    uid = callback.from_user.id
+    luma_days = days_luma[callback.from_user.id]["days"]
+    times = luma_times[callback.from_user.id]["times"]
+    try:
+        history = client.operation_history(label = user_do_buy[callback.from_user.id]["labl"])
+        for operation in history.operations:
+            stata = operation.status
+        try:
+            if stata == "success":
+                if check_user_in_udio(uid) == False:
+                    add_user_in_udio(user_id = uid, days = luma_days, times=times)
+                    if lingo(uid) == "RU":
+                        await callback.message.edit_text(
+                            LEXICON_RU["pay_yes"]
+                        )
+                    elif lingo(uid) == "ENG":
+                        await callback.message.edit_text(
+                            LEXICON_ENG["pay_yes"]
+                        )
+                    elif lingo(uid) == "ES":
+                        await callback.message.edit_text(
+                            LEXICON_ES["pay_yes"]
+                        )
+                    elif lingo(uid) == "CN":
+                        await callback.message.edit_text(
+                            LEXICON_CN["pay_yes"]
+                        )
+            else:
+                    if lingo(uid) == "RU":
+                        await callback.message.edit_text(
+                            LEXICON_RU["pay_yes"]
+                        )
+                    elif lingo(uid) == "ENG":
+                        await callback.message.edit_text(
+                            LEXICON_ENG["pay_yes"]
+                        )
+                    elif lingo(uid) == "ES":
+                        await callback.message.edit_text(
+                            LEXICON_ES["pay_yes"]
+                        )
+                    elif lingo(uid) == "CN":
+                        await callback.message.edit_text(
+                            LEXICON_CN["pay_yes"]
+                        )
+        except UnboundLocalError:
+            if lingo(uid) == "RU":
+                await callback.message.edit_text(
+                    LEXICON_RU["pay_no"],
+                    reply_markup=ikb_back_ru()
+                )
+            elif lingo(uid) == "ENG":
+                await callback.message.edit_text(
+                    LEXICON_ENG["pay_no"],
+                    reply_markup=ikb_back_eng()
+                )
+            elif lingo(uid) == "ES":
+                await callback.message.edit_text(
+                    LEXICON_ES["pay_no"],
+                    reply_markup=ikb_back_es()
+                )
+            elif lingo(uid) == "CN":
+                await callback.message.edit_text(
+                    LEXICON_CN["pay_no"],
+                    reply_markup=ikb_back_cn()
+                )
+    except KeyError:
+        if lingo(uid) == "RU":
+            await callback.message.edit_text(
+                LEXICON_RU["pay_no"],
+                reply_markup=ikb_back_ru()
+            )
+        elif lingo(uid) == "ENG":
+            await callback.message.edit_text(
+                LEXICON_ENG["pay_no"],
+                reply_markup=ikb_back_eng()
+            )
+        elif lingo(uid) == "ES":
+            await callback.message.edit_text(
+                LEXICON_ES["pay_no"],
+                reply_markup=ikb_back_es()
+            )
+        elif lingo(uid) == "CN":
+            await callback.message.edit_text(
+                LEXICON_CN["pay_no"],
+                reply_markup=ikb_back_cn()
+            )
+    await state.set_state(default_state)
 
 @router.callback_query(F.data == "10k")
 async def tokens_10(callback: CallbackQuery, state: FSMContext):
