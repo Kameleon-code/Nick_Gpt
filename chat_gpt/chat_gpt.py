@@ -1,82 +1,244 @@
 import os
+import base64
 import aspose.words as aw
 import openai
+import string
+import random
+import time
+import json
+import requests
 from io import BytesIO
+from lumaai import AsyncLumaAI
 
 from aiogram import F, Router
-from aiogram.types import BufferedInputFile, Message
+from aiogram.types import BufferedInputFile, Message, CallbackQuery, URLInputFile, FSInputFile
+from aiogram.fsm.state import State, StatesGroup, default_state
+from aiogram.fsm.context import FSMContext
+from aiogram.filters import StateFilter
+from aiogram.enums.parse_mode import ParseMode
 from .config import OPENAI_API_KEY
 from supa import BOT
+from concurrent.futures import ThreadPoolExecutor
+from asyncio.events import get_running_loop
 
 
 from db.db import neuro, asks_update, role, user_tokens_update, premium_tokens_update, update_ai, set_mode, ans_gpt, ready_answer_gpt, lingo, user_tokens
-from db.db_premium import check_user_prem, user_in_prem, days_update_plus
+from db.db_premium import check_user_prem
+from db.luma_udio import check_user_in_luma, times_killer, take_mode_kling, take_seconds
 
-from ikb.ikb import photo_again_ru, photo_again_eng, photo_again_es, photo_again_cn, tokens_ikb_ru, tokens_ikb_eng, tokens_ikb_es, tokens_ikb_ru_prem, tokens_ikb_eng_prem, tokens_ikb_es_prem, tokens_ikb_cn_prem, tokens_ikb_cn
+from ikb.ikb import photo_again_ru, photo_again_eng, photo_again_es, photo_again_cn, tokens_ikb_ru, tokens_ikb_eng, tokens_ikb_es, tokens_ikb_ru_prem, tokens_ikb_eng_prem, tokens_ikb_es_prem, tokens_ikb_cn_prem, tokens_ikb_cn, choose_luma_ikb_eng_pro, choose_luma_ikb_eng_standard, choose_luma_ikb_es_standard, choose_luma_ikb_es_pro, choose_luma_ikb_cn_standard, choose_luma_ikb_cn_pro, choose_luma_ikb_ru_pro, choose_luma_ikb_ru_standard, with_no_photo
 
 bot = BOT
+
+class Conditions(StatesGroup):
+    text_for_luma = State()
+    photo_for_luma = State()
+    udio_text = State()
+
+kling_prompt: dict[int, dict[str]] = {}
 
 
 router = Router()
 
 client_1 = openai.AsyncOpenAI(
-    api_key=OPENAI_API_KEY,
-    base_url="https://api.proxyapi.ru/openai/v1",
+    api_key="sk-lf7iHfVz4WTHyarmAB8R71Vr1IsfBf7X",
+    base_url="https://api.proxyapi.ru/openai/v1"
 )
+
+headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': 'Bearer sk-BkRAIS0V63H49gtvyUGumjeZ8dUhr7m7icwM4XoIVwqXltIFzVIFBsnb020v'
+    }
+
+
+@router.callback_query(F.data == "gen_video_ru")
+async def luma(callback: CallbackQuery, state: FSMContext):
+    uid = callback.from_user.id
+    username = callback.from_user.username
+    video_pro = FSInputFile("C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\kling_PRO.mp4", filename="kling_PRO.mp4")
+    video_standard = FSInputFile("C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\kling_STANDARD.mp4", filename="kling_STANDARD.mp4")
+    if username not in ["CODE_PIZZA", "Kseny_7"]:
+        if check_user_in_luma(uid) == False:
+            if lingo(uid) == "RU":
+                    await callback.message.answer_video(
+                        video=video_pro,
+                        caption="👑<b>Kling Pro</b>\n\n🗓Срок подписки: <b>7 дней</b>\n\nДоступные тарифы👇",
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=choose_luma_ikb_ru_pro()
+                    )
+                    await callback.message.answer_video(
+                        video=video_standard,
+                        caption="🚀<b>Kling Standard</b>\n\n🗓Срок подписки: <b>7 дней</b>\n\nДоступные тарифы👇",
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=choose_luma_ikb_ru_standard()
+                    )
+            if lingo(uid) == "ENG":
+                    await callback.message.answer_video(
+                        media=video_pro,
+                        caption="<b>Kling Pro</b>\n\n🗓Subscription period: <b>7 days</b>\n\nAvailable tariffs👇",
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=choose_luma_ikb_eng_pro()
+                    )
+                    await callback.message.answer_video(
+                        media=video_standard,
+                        caption="<b>Kling Standard</b>\n\n🗓Subscription period: <b>7 days</b>\n\nAvailable tariffs👇",
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=choose_luma_ikb_eng_standard()
+                    )
+            if lingo(uid) == "ES":
+                    await callback.message.answer_video(
+                        media=video_pro,
+                        caption="<b>Kling Pro</b>\n\n🗓Periodo de suscripción: <b>7 días</b>\n\nTarifas disponibles👇",
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=choose_luma_ikb_es_pro()
+                    )
+                    await callback.message.answer_video(
+                        media=video_standard,
+                        caption="<b>Kling Standard</b>\n\n🗓Periodo de suscripción: <b>7 días</b>\n\nTarifas disponibles👇",
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=choose_luma_ikb_es_standard()
+                    )
+            if lingo(uid) == "CN":
+                    await callback.message.answer_video(
+                        media=video_pro,
+                        caption="<b>Kling Pro</b>\n\n🗓订阅期限：<b>7 天</b>\n\n 可用关税👇",
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=choose_luma_ikb_cn_pro()
+                    )
+                    await callback.message.answer_video(
+                        media=video_standard,
+                        caption="<b>Kling Standard</b>\n\n🗓订阅期限：<b>7 天</b>\n\n 可用关税👇",
+                        parse_mode=ParseMode.HTML,
+                        reply_markup=choose_luma_ikb_cn_standard()
+                    )
+        else:
+            await callback.message.answer(
+                "Подробно опишите то что хотите увидеть в вашем видео"
+            )
+            await state.set_state(Conditions.text_for_luma)
+    else:
+        await callback.message.answer(
+            "Подробно опишите то что хотите увидеть в вашем видео"
+        )
+        await state.set_state(Conditions.text_for_luma)
+
+@router.message(StateFilter(Conditions.text_for_luma), F.text)
+async def photo_for_luma(message: Message, state: FSMContext):
+    await state.update_data(prompt = message.text)
+    kling_prompt[message.from_user.id] = await state.get_data()
+    await message.answer(
+        "Отправьте фото, которое хотите оживить",
+        reply_markup=with_no_photo()
+    )
+    await state.set_state(Conditions.photo_for_luma)
+
+def check_status_kling(url_res, res):
+    while json.loads(res.text)["status"] != "success":
+        res = requests.get(url_res, headers=headers)
+
+async def async_check_status_kling(loop, url_res, res):
+    with ThreadPoolExecutor() as executor:
+        await loop.run_in_executor(executor, check_status_kling, url_res, res)
+
+
+@router.callback_query(F.data == "no_photo")
+async def just_video(callback: CallbackQuery, state: FSMContext):
+    await callback.message.answer(
+        "⌛️"
+    )
+    loop = get_running_loop()
+    uid = callback.from_user.id
+
+    url_endpoit = "https://api.gen-api.ru/api/v1/networks/kling"
+    url_endpoit = "https://api.gen-api.ru/api/v1/networks/kling"
+    input = {
+    "translate_input": True,
+    "prompt": kling_prompt[callback.from_user.id]["prompt"],
+    "model": f"{take_mode_kling(uid)}",
+    "duration": f"{take_seconds(uid)}",
+    "ratio": "16:9"
+}
+    
+    generation = requests.post(url_endpoit, json=input, headers=headers)
+    id = json.loads(generation.text)["request_id"]
+
+    url_res = f"https://api.gen-api.ru/api/v1/request/get/{id}"
+    time.sleep(10)
+    pre_res = requests.get(url_res, headers=headers)
+    await async_check_status_kling(loop, url_res, pre_res)
+    res = requests.get(url_res, headers=headers)
+    video_link = json.loads(res.text)["result"][0]
+    video_from_url = URLInputFile(video_link)
+    await callback.message.answer_video(
+        video=video_from_url,
+        caption="Ваше видео"
+    )
+    times_killer(uid)
+    await state.set_state(default_state)
+
+@router.message(StateFilter(Conditions.photo_for_luma), F.photo)
+async def img_to_mp4(message: Message, state: FSMContext):
+    uid = message.from_user.id
+    loop = get_running_loop()
+    photo_object = message.photo[-1]
+    photo_id = "".join(random.choices(string.ascii_letters + string.digits, k = 5))
+
+    url_upload = "https://api.imgbb.com/1/upload"
+    url_endpoit = "https://api.gen-api.ru/api/v1/networks/kling"
+
+    await message.bot.download(file=photo_object, destination=f"C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\{photo_id}.jpeg")
+    with open(f"C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\{photo_id}.jpeg", "rb") as file:
+        payload = {
+            "key": "d67765069757eb5ab9ff5dfdfb888279",
+            "image": base64.b64encode(file.read())
+        }
+
+        res = requests.post(url_upload, data=payload)
+        photo = json.loads(res.text)["data"]["url"]
+    await message.answer(
+        "⌛️"
+    )
+
+    input = {
+    "translate_input": True,
+    "image": photo,
+    "prompt": kling_prompt[message.from_user.id]["prompt"],
+    "model": f"{take_mode_kling(uid)}",
+    "duration": f"{take_seconds(uid)}",
+    "ratio": "16:9"
+}
+    
+    generation = requests.post(url_endpoit, json=input, headers=headers)
+    id = json.loads(generation.text)["request_id"]
+    print(id)
+
+    url_res = f"https://api.gen-api.ru/api/v1/request/get/{id}"
+
+    time.sleep(10)
+    pre_res = requests.get(url_res, headers=headers)
+    await async_check_status_kling(loop, url_res, pre_res)
+    res = requests.get(url_res, headers=headers)
+    video_link = json.loads(res.text)["result"][0]
+    video_from_url = URLInputFile(video_link)
+    await message.answer_video(
+        video=video_from_url,
+        caption="Ваше ожилвенное фото"
+    )
+    times_killer(uid)
+    os.remove(f"C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\{photo_id}.jpeg")
+    await state.set_state(default_state)
+
+@router.callback_query(StateFilter(Conditions.udio_text), F.text)
 
 @router.message(F.text)
 async def fin_answer(message: Message):
     message_gpt = message.text
     uid = message.from_user.id
-    if user_tokens(uid) < 0:
-        if check_user_prem(uid) == False:
-            if lingo(uid) == "RU":
-                await message.answer(
-                    "❗️Закончились токены\n\n👇Выберите нужный тариф",
-                    reply_markup=tokens_ikb_ru()
-                )
-            if lingo(uid) == "ENG":
-                await message.answer(
-                    "❗️Out of tokens\n\n👇Select the desired tariff",
-                    reply_markup=tokens_ikb_eng()
-                )
-            if lingo(uid) == "ES":
-                await message.answer(
-                    "❗️Sin fichas\n\n👇Selecciona la tarifa deseada",
-                    reply_markup=tokens_ikb_es()
-                )
-            if lingo(uid) == "CN":
-                await message.answer(
-                    "❗️代币用完\n\n👇选择所需的费率",
-                    reply_markup=tokens_ikb_cn()
-                )
-        elif check_user_prem(uid) == True:
-            if lingo(uid) == "RU":
-                await message.answer(
-                    "❗️Закончились токены\n\n👇Выберите нужный тариф",
-                    reply_markup=tokens_ikb_ru_prem()
-                )
-            if lingo(uid) == "ENG":
-                await message.answer(
-                    "❗️Out of tokens\n\n👇Select the desired tariff",
-                    reply_markup=tokens_ikb_eng_prem()
-                )
-            if lingo(uid) == "ES":
-                await message.answer(
-                    "❗️Sin fichas\n\n👇Selecciona la tarifa deseada",
-                    reply_markup=tokens_ikb_es_prem()
-                )
-            if lingo(uid) == "CN":
-                await message.answer(
-                    "❗️代币用完\n\n👇选择所需的费率",
-                    reply_markup=tokens_ikb_cn_prem()
-                )
-    else:
+    if user_tokens(uid) > 0:
         await message.answer(
             "⌛️"
         )
-        doc = aw.Document()
-        builder = aw.DocumentBuilder(doc)
         if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini"]:
                 asks_update(uid)
                 if check_user_prem(uid) == True:
@@ -95,31 +257,7 @@ async def fin_answer(message: Message):
                         {"role": "user", "content": message_gpt}, {"role": "system", "content": prompt, "max_tokens": 8000}], model=neuro(uid)
                                 )
                 total_tokens = chat_completion.usage.total_tokens
-                answer = chat_completion.choices[0].message.content
-                if check_user_prem(uid) == True:
-                    premium_tokens_update(uid, total_tokens)
-                else:
-                    user_tokens_update(uid, total_tokens)
-                if role(uid) in ["2", "3", "4"]:
-                        punctuation = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']
-                        new_name = message_gpt
-                        for i in message_gpt:
-                            if i in punctuation:
-                                new_name = new_name.replace(i, '')
-                        builder.writeln(answer)
-                        doc.save(f"{new_name}.docx")
-                        with open(f"{new_name}.docx", "rb") as file:
-                            file_for_send = BufferedInputFile(
-                                file.read(),
-                                filename=f"{new_name}.docx"
-                            )      
-                            await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
-                        os.remove(f"/home/nick/Nick_Gpt/{new_name}.docx")
-                        set_mode(uid, "1")
-                else:
-                    await message.answer(
-                        answer
-                        )
+                answer = chat_completion.choices[0].message.content 
         elif neuro(uid) == "o1-mini" or neuro(uid) == "o1-preview":
                     chat_completion = await client_1.chat.completions.create(
                     model=neuro(uid),
@@ -132,54 +270,16 @@ async def fin_answer(message: Message):
                 )      
                     total_tokens = chat_completion.usage.total_tokens
                     answer = chat_completion.choices[0].message.content
-                    if check_user_prem(uid) == True:
-                        premium_tokens_update(uid, total_tokens)
-                    else:
-                        user_tokens_update(uid, total_tokens)
-                    if role(uid) in ["2", "3", "4"]:
-                            punctuation = ['!', '"', '#', '$', '%', '&', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']
-                            new_name = message_gpt
-                            for i in message_gpt:
-                                if i in punctuation:
-                                    new_name = new_name.replace(i, '')
-                            builder.writeln(answer)
-                            doc.save(f"{new_name}.docx")
-                            with open(f"{new_name}.docx", "rb") as file:
-                                file_for_send = BufferedInputFile(
-                                    file.read(),
-                                    filename=f"{new_name}.docx"
-                                )      
-                                await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
-                            os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
-                            set_mode(uid, "1")
-                    else:
-                        await message.answer(
-                            answer
-                            )
         elif neuro(uid) in ["DALL-E 3"]:
-                image = await client_1.images.generate(
-                      model="dall-e-3",
-                      prompt=message_gpt,
-                      size="1024x1024",
-                      quality="hd",
-                      n=1,
-                      style="vivid"
-               )
-                answer = image.data[0].url
-                total_tokens = 1000
-                if check_user_prem(uid) == True:
-                    premium_tokens_update(uid, total_tokens)
-                else:
-                    user_tokens_update(uid, total_tokens)
-                if lingo(uid) == "RU":
-                    await message.answer_photo(photo=answer, reply_markup=photo_again_ru())
-                elif lingo(uid) == "ENG":
-                    await message.answer_photo(photo=answer, reply_markup=photo_again_eng())
-                elif lingo(uid) == "ES":
-                    await message.answer_photo(photo=answer, reply_markup=photo_again_es())
-                elif lingo(uid) == "CN":
-                    await message.answer_photo(photo=answer, reply_markup=photo_again_cn())
-                update_ai(uid, "gpt-4o-mini")
+            image = await client_1.images.generate(
+                model="dall-e-3",
+                prompt=message_gpt,
+                size="1024x1024",
+                quality="hd",
+                n=1,
+                style="vivid"
+            )
+            answer = image.data[0].url
         doc = aw.Document()
         builder = aw.DocumentBuilder(doc)
         if role(uid) in ["2", "3", "4"]:
@@ -198,3 +298,72 @@ async def fin_answer(message: Message):
                     await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
                 os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
                 set_mode(uid, "1")
+        else:
+            if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini", " o1-preview", "o1-mini"]:
+                await message.answer(
+                    answer
+                )
+            else:
+                if lingo(uid) == "RU":
+                    await message.answer_photo(photo=answer, reply_markup=photo_again_ru())
+                elif lingo(uid) == "ENG":
+                    await message.answer_photo(photo=answer, reply_markup=photo_again_eng())
+                elif lingo(uid) == "ES":
+                    await message.answer_photo(photo=answer, reply_markup=photo_again_es())
+                elif lingo(uid) == "CN":
+                    await message.answer_photo(photo=answer, reply_markup=photo_again_cn())
+        if check_user_prem(uid == True):
+                if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini", " o1-preview", "o1-mini"]:
+                    premium_tokens_update(uid, total_tokens)
+                else:
+                    premium_tokens_update(uid, 1000)
+                    update_ai(uid, "gpt-4o-mini")
+        else:
+                if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini", " o1-preview", "o1-mini"]:
+                    user_tokens_update(uid, total_tokens)
+                else:
+                    user_tokens_update(uid, 1000)
+                    update_ai(uid, "gpt-4o-mini")
+    else:
+        if check_user_prem(uid) == False:
+            if lingo(uid) == "RU":
+                message.answer(
+                    f"Закончились токены! на данный момент ваш баланс {user_tokens(uid)}. Вы можете пополнить баланс выбрав нужный для вас тариф!",
+                    reply_markup=tokens_ikb_ru()
+                )
+            elif lingo(uid) == "ENG":
+                message.answer(
+                    f"We're out of tokens! As of this moment, your balance {user_tokens(uid)}. You can refill your balance by choosing the tariff you need!",
+                    reply_markup=tokens_ikb_eng()
+                )
+            elif lingo(uid) == "ES":
+                message.answer(
+                    f"Nos hemos quedado sin fichas. Tu saldo actual es de {user_tokens(uid)}. Puedes recargar tu saldo eligiendo la tarifa que necesites.",
+                    reply_markup=tokens_ikb_es()
+                )
+            elif lingo(uid) == "CN":
+                message.answer(
+                    f"我們沒有代幣了! 您的餘額目前是 {user_tokens(uid)}. 您可以選擇所需的電價來充值您的餘額!",
+                    reply_markup=tokens_ikb_cn()
+                )
+        else:
+            if lingo(uid) == "RU":
+                message.answer(
+                    f"Закончились токены! на данный момент ваш бланас {user_tokens(uid)}. Вы можете пополнить баланс выбрав нужный для вас тариф!",
+                    reply_markup=tokens_ikb_ru_prem()
+                )
+            elif lingo(uid) == "ENG":
+                message.answer(
+                    f"We're out of tokens! As of this moment, your balance {user_tokens(uid)}. You can refill your balance by choosing the tariff you need!",
+                    reply_markup=tokens_ikb_eng_prem()
+                )
+            elif lingo(uid) == "ES":
+                message.answer(
+                    f"Nos hemos quedado sin fichas. Tu saldo actual es de {user_tokens(uid)}. Puedes recargar tu saldo eligiendo la tarifa que necesites",
+                    reply_markup=tokens_ikb_es_prem()
+                )
+            elif lingo(uid) == "CN":
+                message.answer(
+                    f"我們沒有代幣了! 您的餘額目前是 {user_tokens(uid)}. 您可以選擇所需的電價來充值您的餘額!",
+                    reply_markup=tokens_ikb_cn_prem()
+                )
