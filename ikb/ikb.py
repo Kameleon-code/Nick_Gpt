@@ -486,6 +486,50 @@ def tokens_ikb_cn_prem():
 
     return keyboard
 
+def choose_udio_ikb_ru():
+    ikb = [
+        [
+            InlineKeyboardButton(text="10 генераций - 499 р", callback_data="udio_10")
+        ]
+    ]
+
+    keybaord = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keybaord
+
+def choose_udio_ikb_eng():
+    ikb = [
+        [
+            InlineKeyboardButton(text="10 generations - 499 р", callback_data="udio_10")
+        ]
+    ]
+
+    keybaord = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keybaord
+
+def choose_udio_ikb_es():
+    ikb = [
+        [
+            InlineKeyboardButton(text="10 generaciones - 499 р", callback_data="udio_10")
+        ]
+    ]
+
+    keybaord = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keybaord
+
+def choose_udio_ikb_cn():
+    ikb = [
+        [
+            InlineKeyboardButton(text="10 代 - 499 р", callback_data="udio_10")
+        ]
+    ]
+
+    keybaord = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keybaord
+
 def choose_luma_ikb_ru_standard():
     ikb = [
         [
