@@ -775,10 +775,10 @@ def photo_text_ru():
             InlineKeyboardButton(text="📷Фото", callback_data="photo_ru")
         ],
         [
-            InlineKeyboardButton(text="📹Оживить фотографию", callback_data="gen_video_ru")
+            InlineKeyboardButton(text="📹Оживить фотографию", callback_data="gen_video")
         ],
         [
-            InlineKeyboardButton(text="🎵Генерация музыки", callback_data="gen_music_ru")
+            InlineKeyboardButton(text="🎵Генерация музыки", callback_data="gen_music")
         ]
     ]
 
@@ -795,10 +795,10 @@ def photo_text_eng():
             InlineKeyboardButton(text="📷Photo", callback_data="photo_eng")
         ],
         [
-            InlineKeyboardButton(text="📹Video Revival", callback_data="gen_video_eng")
+            InlineKeyboardButton(text="📹Video Revival", callback_data="gen_video")
         ],
         [
-            InlineKeyboardButton(text="🎵Generating music", callback_data="gen_music_eng")
+            InlineKeyboardButton(text="🎵Generating music", callback_data="gen_music")
         ]
     ]
 
@@ -815,10 +815,10 @@ def photo_text_es():
             InlineKeyboardButton(text="📷Foto", callback_data="photo_es")
         ],
         [
-            InlineKeyboardButton(text="📹Reactivación del vídeo", callback_data="gen_video_es")
+            InlineKeyboardButton(text="📹Reactivación del vídeo", callback_data="gen_video")
         ],
         [
-            InlineKeyboardButton(text="🎵Generación de música", callback_data="gen_music_es")
+            InlineKeyboardButton(text="🎵Generación de música", callback_data="gen_music")
         ]
     ]
 
@@ -835,10 +835,10 @@ def photo_text_cn():
             InlineKeyboardButton(text="📷照片", callback_data="photo_cn")
         ],
         [
-            InlineKeyboardButton(text="📹视频复兴", callback_data="gen_video_cn")
+            InlineKeyboardButton(text="📹视频复兴", callback_data="gen_video")
         ],
         [
-            InlineKeyboardButton(text="🎵音乐世代", callback_data="gen_music_cn")
+            InlineKeyboardButton(text="🎵音乐世代", callback_data="gen_music")
         ]
     ]
 
@@ -1074,7 +1074,7 @@ def change_mode_cn():
 def with_no_photo():
     ikb = [
         [
-            InlineKeyboardButton(text="Продолжить без фото", callback_data="no_photo")
+            InlineKeyboardButton(text="NO PHOTO", callback_data="no_photo")
         ]
     ]
 
