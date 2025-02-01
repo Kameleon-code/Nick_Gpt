@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("db\udio.db", check_same_thread=False)
+conn = sqlite3.connect("db/udio.db", check_same_thread=False)
 cur = conn.cursor()
 
 #Чек пользователя в бд
