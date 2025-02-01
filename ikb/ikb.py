@@ -21,6 +21,18 @@ class Pagination_es(CallbackData, prefix="pag_es"):
 class Pagination_cn(CallbackData, prefix="pag_cn"):
     page: int
 
+class Pag_photo_ru(CallbackData, prefix="pag_photo_ru"):
+    page: int
+
+class Pag_photo_eng(CallbackData, prefix="pag_photo_eng"):
+    page: int
+
+class Pag_photo_es(CallbackData, prefix="pag_photo_es"):
+    page: int
+
+class Pag_photo_cn(CallbackData, prefix="pag_photo_cn"):
+    page: int
+
 #Кнопка назад
 
 def ikb_back_ru():
@@ -224,6 +236,12 @@ def tokens_ikb_ru():
             InlineKeyboardButton(text=LEXICON_RU["premium_kb"], callback_data="premium")
         ],
         [
+            InlineKeyboardButton(text="🎥Kling", callback_data="kling")
+        ],
+        [
+            InlineKeyboardButton(text="🎹Udio", callback_data="udio")
+        ],
+        [
             InlineKeyboardButton(text=LEXICON_RU["10k"], callback_data="10k")
         ],
         [
@@ -248,6 +266,12 @@ def tokens_ikb_ru_prem():
     ikb = [
         [
             InlineKeyboardButton(text=LEXICON_RU["premium_kb"], callback_data="premium")
+        ],
+        [
+            InlineKeyboardButton(text="🎥Kling", callback_data="kling")
+        ],
+        [
+            InlineKeyboardButton(text="🎹Udio", callback_data="udio")
         ],
         [
             InlineKeyboardButton(text=LEXICON_RU["10k_prem"], callback_data="10k")
@@ -276,6 +300,12 @@ def tokens_ikb_eng():
             InlineKeyboardButton(text=LEXICON_RU["premium_kb"], callback_data="premium")
         ],
         [
+            InlineKeyboardButton(text="🎥Kling", callback_data="kling")
+        ],
+        [
+            InlineKeyboardButton(text="🎹Udio", callback_data="udio")
+        ],
+        [
             InlineKeyboardButton(text=LEXICON_ENG["10k"], callback_data="10k")
         ],
         [
@@ -300,6 +330,12 @@ def tokens_ikb_eng_prem():
     ikb = [
         [
             InlineKeyboardButton(text=LEXICON_RU["premium_kb"], callback_data="premium")
+        ],
+        [
+            InlineKeyboardButton(text="🎥Kling", callback_data="kling")
+        ],
+        [
+            InlineKeyboardButton(text="🎹Udio", callback_data="udio")
         ],
         [
             InlineKeyboardButton(text=LEXICON_ENG["10k_prem"], callback_data="10k")
@@ -328,6 +364,12 @@ def tokens_ikb_es():
             InlineKeyboardButton(text=LEXICON_RU["premium_kb"], callback_data="premium")
         ],
         [
+            InlineKeyboardButton(text="🎥Kling", callback_data="kling")
+        ],
+        [
+            InlineKeyboardButton(text="🎹Udio", callback_data="udio")
+        ],
+        [
             InlineKeyboardButton(text=LEXICON_ES["10k"], callback_data="10k")
         ],
         [
@@ -352,6 +394,12 @@ def tokens_ikb_es_prem():
     ikb = [
         [
             InlineKeyboardButton(text=LEXICON_RU["premium_kb"], callback_data="premium")
+        ],
+        [
+            InlineKeyboardButton(text="🎥Kling", callback_data="kling")
+        ],
+        [
+            InlineKeyboardButton(text="🎹Udio", callback_data="udio")
         ],
         [
             InlineKeyboardButton(text=LEXICON_ES["10k_prem"], callback_data="10k")
@@ -380,6 +428,12 @@ def tokens_ikb_cn():
             InlineKeyboardButton(text=LEXICON_RU["premium_kb"], callback_data="premium")
         ],
         [
+            InlineKeyboardButton(text="🎥Kling", callback_data="kling")
+        ],
+        [
+            InlineKeyboardButton(text="🎹Udio", callback_data="udio")
+        ],
+        [
             InlineKeyboardButton(text=LEXICON_CN["10k"], callback_data="10k")
         ],
         [
@@ -406,6 +460,12 @@ def tokens_ikb_cn_prem():
             InlineKeyboardButton(text=LEXICON_RU["premium_kb"], callback_data="premium")
         ],
         [
+            InlineKeyboardButton(text="🎥Kling", callback_data="kling")
+        ],
+        [
+            InlineKeyboardButton(text="🎹Udio", callback_data="udio")
+        ],
+        [
             InlineKeyboardButton(text=LEXICON_CN["10k_prem"], callback_data="10k")
         ],
         [
@@ -419,6 +479,119 @@ def tokens_ikb_cn_prem():
         ],
         [
             InlineKeyboardButton(text=LEXICON_CN["500k_prem"], callback_data="500k")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def choose_luma_ikb_ru_standard():
+    ikb = [
+        [
+            InlineKeyboardButton(text="5 генераций - 399 р", callback_data = "week_standard_5")
+        ],
+        [
+            InlineKeyboardButton(text="10 генераций - 659 р", callback_data="week_standard_10")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+
+def choose_luma_ikb_ru_pro():
+    ikb = [
+        [
+            InlineKeyboardButton(text="5 генераций - 899 р", callback_data = "week_pro_5")
+        ],
+        [
+            InlineKeyboardButton(text="10 генераций - 1699 р", callback_data="week_pro_10")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def choose_luma_ikb_eng_pro():
+    ikb = [
+        [
+            InlineKeyboardButton(text="5 generations - 899 rubles", callback_data = "week_pro_5")
+        ],
+        [
+            InlineKeyboardButton(text="10 generations - 1699 rubles", callback_data="week_pro_10")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def choose_luma_ikb_eng_standard():
+    ikb = [
+        [
+            InlineKeyboardButton(text="5 generations - 399 rubles", callback_data = "week_standard_5")
+        ],
+        [
+            InlineKeyboardButton(text="10 generations - 659 rubles", callback_data="week_standard_10")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def choose_luma_ikb_es_pro():
+    ikb = [
+        [
+            InlineKeyboardButton(text="5 generaciones - 899 rublos", callback_data = "week_pro_5")
+        ],
+        [
+            InlineKeyboardButton(text="10 generaciones - 1699 rublos", callback_data="week_pro_10")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def choose_luma_ikb_es_standard():
+    ikb = [
+        [
+            InlineKeyboardButton(text="5 generaciones - 399 rublos", callback_data = "week_standard_5")
+        ],
+        [
+            InlineKeyboardButton(text="10 generaciones - 659 rublos", callback_data="week_standard_10")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def choose_luma_ikb_cn_pro():
+    ikb = [
+        [
+            InlineKeyboardButton(text="5 代 - 899 卢布", callback_data = "week_pro_5")
+        ],
+        [
+            InlineKeyboardButton(text="10 代 - 1699 卢布", callback_data="week_pro_10")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def choose_luma_ikb_cn_standard():
+    ikb = [
+        [
+            InlineKeyboardButton(text="5 代 - 399 卢布", callback_data = "week_standard_5")
+        ],
+        [
+            InlineKeyboardButton(text="10 代 - 659 卢布", callback_data="week_standard_10")
         ]
     ]
 
@@ -556,6 +729,12 @@ def photo_text_ru():
         ],
         [
             InlineKeyboardButton(text="📷Фото", callback_data="photo_ru")
+        ],
+        [
+            InlineKeyboardButton(text="📹Оживить фотографию", callback_data="gen_video_ru")
+        ],
+        [
+            InlineKeyboardButton(text="🎵Генерация музыки", callback_data="gen_music_ru")
         ]
     ]
 
@@ -570,6 +749,12 @@ def photo_text_eng():
         ],
         [
             InlineKeyboardButton(text="📷Photo", callback_data="photo_eng")
+        ],
+        [
+            InlineKeyboardButton(text="📹Video Revival", callback_data="gen_video_eng")
+        ],
+        [
+            InlineKeyboardButton(text="🎵Generating music", callback_data="gen_music_eng")
         ]
     ]
 
@@ -584,6 +769,12 @@ def photo_text_es():
         ],
         [
             InlineKeyboardButton(text="📷Foto", callback_data="photo_es")
+        ],
+        [
+            InlineKeyboardButton(text="📹Reactivación del vídeo", callback_data="gen_video_es")
+        ],
+        [
+            InlineKeyboardButton(text="🎵Generación de música", callback_data="gen_music_es")
         ]
     ]
 
@@ -598,6 +789,12 @@ def photo_text_cn():
         ],
         [
             InlineKeyboardButton(text="📷照片", callback_data="photo_cn")
+        ],
+        [
+            InlineKeyboardButton(text="📹视频复兴", callback_data="gen_video_cn")
+        ],
+        [
+            InlineKeyboardButton(text="🎵音乐世代", callback_data="gen_music_cn")
         ]
     ]
 
@@ -610,7 +807,7 @@ def photo_text_cn():
 def photo_again_ru():
     ikb = [
         [
-            InlineKeyboardButton(text="🔁Повторить генерацию", callback_data="photo_ru")
+            InlineKeyboardButton(text="🔁Потвторить генерацию", callback_data="photo_ru")
         ]
     ]
 
@@ -701,6 +898,54 @@ def get_paginated_kb_cn(page: int = 1) -> InlineKeyboardMarkup:
 
     return keyboard
 
+def pag_photo_ru(page: int = 1):
+    ikb = [
+            [
+                InlineKeyboardButton(text="⬅️", callback_data=Pag_photo_ru(page=page - 1).pack()),
+                InlineKeyboardButton(text=f"🟢{pages(page)}/{pages_count()}", callback_data="None"),
+                InlineKeyboardButton(text="➡️", callback_data=Pag_photo_ru(page=page + 1).pack())
+            ]
+            ]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def pag_photo_eng(page: int = 1):
+    ikb = [
+            [
+                InlineKeyboardButton(text="⬅️", callback_data=Pag_photo_eng(page=page - 1).pack()),
+                InlineKeyboardButton(text=f"🟢{pages(page)}/{pages_count()}", callback_data="None"),
+                InlineKeyboardButton(text="➡️", callback_data=Pag_photo_eng(page=page + 1).pack())
+            ]
+            ]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def pag_photo_es(page: int = 1):
+    ikb = [
+            [
+                InlineKeyboardButton(text="⬅️", callback_data=Pag_photo_es(page=page - 1).pack()),
+                InlineKeyboardButton(text=f"🟢{pages(page)}/{pages_count()}", callback_data="None"),
+                InlineKeyboardButton(text="➡️", callback_data=Pag_photo_es(page=page + 1).pack())
+            ]
+            ]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
+def pag_photo_cn(page: int = 1):
+    ikb = [
+            [
+                InlineKeyboardButton(text="⬅️", callback_data=Pag_photo_cn(page=page - 1).pack()),
+                InlineKeyboardButton(text=f"🟢{pages(page)}/{pages_count()}", callback_data="None"),
+                InlineKeyboardButton(text="➡️", callback_data=Pag_photo_cn(page=page + 1).pack())
+            ]
+            ]
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
+
 #Режимы
 def change_mode_ru():
     ikb = [
@@ -781,3 +1026,14 @@ def change_mode_cn():
     keybaord = InlineKeyboardMarkup(inline_keyboard=ikb)
 
     return keybaord
+
+def with_no_photo():
+    ikb = [
+        [
+            InlineKeyboardButton(text="Продолжить без фото", callback_data="no_photo")
+        ]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=ikb)
+
+    return keyboard
