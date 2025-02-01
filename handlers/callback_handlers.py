@@ -490,25 +490,25 @@ async def udio(callback: CallbackQuery):
     uid = callback.from_user.id
     if lingo(uid) == "RU":
         await callback.message.answer(
-            text="👑<b></b>\n\n🗓Срок подписки: <b>7 дней</b>\n\nДоступные тарифы👇",
+            text="🎧<b>Udio</b>\n\n🗓Срок подписки: <b>7 дней</b>\n\nДоступные тарифы👇",
             parse_mode=ParseMode.HTML,
             reply_markup=choose_udio_ikb_ru()
         )
     elif lingo(uid) == "ENG":
         await callback.message.answer(
-            text="<b></b>\n\n🗓Subscription period: <b>7 days</b>\n\nAvailable tariffs👇",
+            text="🎧<b>Udio</b>\n\n🗓Subscription period: <b>7 days</b>\n\nAvailable tariffs👇",
             parse_mode=ParseMode.HTML,
             reply_markup=choose_udio_ikb_eng()
         )
     elif lingo(uid) == "ES":
         await callback.message.answer(
-            text="<b></b>\n\n🗓Periodo de suscripción: <b>7 días</b>\n\nTarifas disponibles👇",
+            text="🎧<b>Udio</b>\n\n🗓Periodo de suscripción: <b>7 días</b>\n\nTarifas disponibles👇",
             parse_mode=ParseMode.HTML,
             reply_markup=choose_udio_ikb_es()
         )
     elif lingo(uid) == "CN":
         await callback.message.answer(
-            text="<b></b>\n\n🗓订阅期限：<b>7 天</b>\n\n 可用关税👇",
+            text="🎧<b>Udio</b>\n\n🗓订阅期限：<b>7 天</b>\n\n 可用关税👇",
             parse_mode=ParseMode.HTML,
             reply_markup=choose_udio_ikb_cn()
         )
@@ -531,7 +531,7 @@ async def week(callback: CallbackQuery, state: FSMContext):
             quickpay_form="shop",
             targets="Sponsor",
             paymentType="SB",
-            sum=399,
+            sum=499,
             label=num3
         )
     if lingo(uid) == "RU":
