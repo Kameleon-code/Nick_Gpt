@@ -221,8 +221,8 @@ async def img_to_mp4(message: Message, state: FSMContext):
     url_upload = "https://api.imgbb.com/1/upload"
     url_endpoit = "https://api.gen-api.ru/api/v1/networks/kling"
 
-    await message.bot.download(file=photo_object, destination=f"C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\{photo_id}.jpeg")
-    with open(f"C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\{photo_id}.jpeg", "rb") as file:
+    await message.bot.download(file=photo_object, destination=f"/home/nick/Nick_Gpt/{photo_id}.jpeg")
+    with open(f"/home/nick/Nick_Gpt/{photo_id}.jpeg", "rb") as file:
         payload = {
             "key": "d67765069757eb5ab9ff5dfdfb888279",
             "image": base64.b64encode(file.read())
@@ -260,7 +260,7 @@ async def img_to_mp4(message: Message, state: FSMContext):
         caption="📹📹📹"
     )
     times_killer(uid)
-    os.remove(f"C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\{photo_id}.jpeg")
+    os.remove(f"/home/nick/Nick_Gpt/{photo_id}.jpeg")
     await state.set_state(default_state)
 
 @router.callback_query(F.data == "gen_music")
@@ -440,7 +440,7 @@ async def fin_answer(message: Message):
                         filename=f"{new_name}.docx"
                     )      
                     await message.reply_document(file_for_send, caption=f"Вот ваша работа на тему: '{message.text}'")
-                os.remove(f"C:\\Users\\user\\Desktop\\projets from kitty\\AI-Bot\\{new_name}.docx")
+                os.remove(f"/home/nick/Nick_Gpt/{new_name}.docx")
                 set_mode(uid, "1")
         else:
             if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini", " o1-preview", "o1-mini"]:
