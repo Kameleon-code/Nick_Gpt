@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("/home/nick/Nick_Gpt/db/luma.db", check_same_thread=False)
+conn = sqlite3.connect("db/luma.db", check_same_thread=False)
 cur = conn.cursor()
 
 #Чек юзера в бд
