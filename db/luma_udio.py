@@ -1,11 +1,11 @@
 import sqlite3
 
-conn = sqlite3.connect("db\luma_udio.db", check_same_thread=False)
+conn = sqlite3.connect("db\luma.db", check_same_thread=False)
 cur = conn.cursor()
 
 #Чек юзера в бд
 def check_user_in_luma(user_id):
-    cur.execute(f"SELECT * FROM luma_udio WHERE user_id = {user_id}")
+    cur.execute(f"SELECT * FROM luma WHERE user_id = {user_id}")
     user = cur.fetchone()
     if user:
         return True
