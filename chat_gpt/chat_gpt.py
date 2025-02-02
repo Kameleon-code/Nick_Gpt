@@ -24,7 +24,7 @@ from asyncio.events import get_running_loop
 
 from db.db import neuro, asks_update, role, user_tokens_update, premium_tokens_update, update_ai, set_mode, ans_gpt, ready_answer_gpt, lingo, user_tokens
 from db.db_premium import check_user_prem
-from db.luma_udio import check_user_in_luma, times_killer, take_mode_kling, take_seconds
+from db.luma import check_user_in_luma, times_killer, take_mode_kling, take_seconds
 from db.udio import times_udio_killer, check_user_in_udio
 
 from ikb.ikb import photo_again_ru, photo_again_eng, photo_again_es, photo_again_cn, tokens_ikb_ru, tokens_ikb_eng, tokens_ikb_es, tokens_ikb_ru_prem, tokens_ikb_eng_prem, tokens_ikb_es_prem, tokens_ikb_cn_prem, tokens_ikb_cn, choose_luma_ikb_eng_pro, choose_luma_ikb_eng_standard, choose_luma_ikb_es_standard, choose_luma_ikb_es_pro, choose_luma_ikb_cn_standard, choose_luma_ikb_cn_pro, choose_luma_ikb_ru_pro, choose_luma_ikb_ru_standard, with_no_photo, choose_udio_ikb_ru, choose_udio_ikb_eng, choose_udio_ikb_es, choose_udio_ikb_cn
