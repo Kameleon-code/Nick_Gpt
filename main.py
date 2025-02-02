@@ -18,7 +18,7 @@ from ikb.ikb import sub_ikb_ru, sub_ikb_eng, sub_ikb_esp, sub_ikb_cn
 from keyboard.kb import menu_kb_ru, menu_kb_eng, menu_kb_es, menu_kb_cn
 from db.db_premium import days, u_in, days_update, delete_user
 from db.db import premium_days_set, tokens_plus_update
-from db.luma_udio import take_all_luma_users, short_days, take_days_from_luma, delete_user_from_luma
+from db.luma import take_all_luma_users, short_days, take_days_from_luma, delete_user_from_luma
 from db.udio import take_all_udio_users, days_udio_killer, take_days_udio, delete_from_udio
 from chat_gpt import chat_gpt
 from supa import BOT
