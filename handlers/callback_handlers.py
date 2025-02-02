@@ -15,7 +15,7 @@ from ikb.ikb import sub_ikb_ru, sub_ikb_eng, sub_ikb_esp, sub_ikb_cn, ikb_premiu
 from db.db import user_in_db, check_user, lingo, user_lingo, update_ai, tokens_plus_update, set_mode
 from db.db_pag import title, stat, stat_eng, stat_es, stat_cn
 from db.db_premium import check_user_prem, user_in_prem
-from db.luma_udio import check_user_in_luma, add_user_in_luma
+from db.luma import check_user_in_luma, add_user_in_luma
 from db.udio import add_user_in_udio, check_user_in_udio
 from lexicon.lexicon_ru import LEXICON_RU
 from lexicon.lexicon_eng import LEXICON_ENG
