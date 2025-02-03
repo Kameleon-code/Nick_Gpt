@@ -57,8 +57,8 @@ headers = {
 async def luma(callback: CallbackQuery, state: FSMContext):
     uid = callback.from_user.id
     username = callback.from_user.username
-    video_pro = FSInputFile("C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\kling_PRO.mp4", filename="kling_PRO.mp4")
-    video_standard = FSInputFile("C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\kling_STANDARD.mp4", filename="kling_STANDARD.mp4")
+    video_pro = FSInputFile("/home/nick/Nick_Gpt/chat_gpt/kling_PRO.mp4", filename="kling_PRO.mp4")
+    video_standard = FSInputFile("/home/nick/Nick_Gpt/chat_gpt/kling_STANDARD.mp4", filename="kling_STANDARD.mp4")
     if username not in ["CODE_PIZZA", "Kseny_7"]:
         if check_user_in_luma(uid) == False:
             if lingo(uid) == "RU":
@@ -114,6 +114,7 @@ async def luma(callback: CallbackQuery, state: FSMContext):
                         reply_markup=choose_luma_ikb_cn_standard()
                     )
         else:
+
             if lingo(uid) == "RU":
                 await callback.message.answer(
                     "Подробно опишите то что хотите увидеть в вашем видео"
