@@ -6,7 +6,7 @@ cur = conn.cursor()
 #Чек пользователя в бд
 def check_user_in_udio(user_id):
     cur.execute(f"SELECT * FROM udio WHERE user_id = {user_id}")
-    user = cur.fetchone()[0]
+    user = cur.fetchone()
     if user:
         return True
     else:
