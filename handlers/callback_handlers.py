@@ -429,8 +429,8 @@ async def check(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data == "kling")
 async def kling(callback: CallbackQuery):
-    video_pro = FSInputFile("C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\kling_PRO.mp4", filename="kling_PRO.mp4")
-    video_standard = FSInputFile("C:\\Users\\user\\Desktop\\projects\\local\\AI-Bot\\chat_gpt\\kling_STANDARD.mp4", filename="kling_STANDARD.mp4")
+    video_pro = FSInputFile("/home/nick/Nick_Gpt/chat_gpt/kling_PRO.mp4", filename="kling_PRO.mp4")
+    video_standard = FSInputFile("/home/nick/Nick_Gpt/chat_gpt/kling_STANDARD.mp4", filename="kling_STANDARD.mp4")
     uid = callback.from_user.id
     if lingo(uid) == "RU":
         await callback.message.answer_video(
