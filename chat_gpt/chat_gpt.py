@@ -425,6 +425,7 @@ async def fin_answer(message: Message):
                 style="vivid"
             )
             answer = image.data[0].url
+            print(answer)
         doc = aw.Document()
         builder = aw.DocumentBuilder(doc)
         if role(uid) in ["2", "3", "4"]:
@@ -462,13 +463,13 @@ async def fin_answer(message: Message):
                     premium_tokens_update(uid, total_tokens)
                 else:
                     premium_tokens_update(uid, 1000)
-                    update_ai(uid, "gpt-4o-mini")
+                    update_ai(uid, "gpt-3.5-turbo")
         else:
                 if neuro(uid) in ["gpt-3.5-turbo", "gpt-4o-mini", " o1-preview", "o1-mini"]:
                     user_tokens_update(uid, total_tokens)
                 else:
                     user_tokens_update(uid, 1000)
-                    update_ai(uid, "gpt-4o-mini")
+                    update_ai(uid, "gpt-3.5-turbo")
     else:
         if check_user_prem(uid) == False:
             if lingo(uid) == "RU":
