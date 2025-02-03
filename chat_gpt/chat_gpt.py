@@ -117,7 +117,7 @@ async def luma(callback: CallbackQuery, state: FSMContext):
 
             if lingo(uid) == "RU":
                 await callback.message.answer(
-                    "Подробно опишите то что хотите увидеть в вашем видео"
+                    "Подробно опишите то, что хотите увидеть в Вашем видео"
                 )
                 await state.set_state(Conditions.text_for_luma)
             elif lingo(uid) == "ENG":
@@ -137,7 +137,7 @@ async def luma(callback: CallbackQuery, state: FSMContext):
                 await state.set_state(Conditions.text_for_luma)
     else:
         await callback.message.answer(
-            "Подробно опишите то что хотите увидеть в вашем видео"
+            "Подробно опишите то, что хотите увидеть в Вашем видео"
         )
         await state.set_state(Conditions.text_for_luma)
 
@@ -297,7 +297,7 @@ async def start_music(callback: CallbackQuery, state: FSMContext):
         else:
             if lingo(uid) == "RU":
                 await callback.message.answer(
-                    "Подробно опишите то что вы хотите услышать в аудио"
+                    "Подробно опишите то, что вы хотите услышать в аудио"
                 )
             elif lingo(uid) == "ENG":
                 await callback.message.answer(
@@ -314,7 +314,7 @@ async def start_music(callback: CallbackQuery, state: FSMContext):
     else:         
         if lingo(uid) == "RU":
             await callback.message.answer(
-                "Подробно опишите то что вы хотите услышать в аудио"
+                "Подробно опишите то, что вы хотите услышать в аудио"
             )
         elif lingo(uid) == "ENG":
             await callback.message.answer(
