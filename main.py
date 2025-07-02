@@ -39,7 +39,7 @@ def premium_counter():
     for z in range(len(massive_big)):
         list_.append(massive_big[z][0])
     for m in list_:
-        tokens_plus_update(m, 500)
+        tokens_plus_update(m, 250)
         days_update(m)
         premium_days_set(m, days(m))
         if days(m) < 1:
